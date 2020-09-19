@@ -1,0 +1,2 @@
+export const SET_FONT_LOADED = "SET_FONT_LOADED";
+export const SET_TOSS_IN_PROGRESS = "SET_TOSS_IN_PROGRESS";
