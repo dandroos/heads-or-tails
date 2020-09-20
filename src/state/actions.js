@@ -1,11 +1,16 @@
-import { SET_TOSS_IN_PROGRESS, SET_FONT_LOADED } from "./types";
+import { SET_IMAGES_LOADED, SET_DIALOG_INFO, SET_DIALOG_SHARE } from "./types";
 
-export const setFontLoaded = (payload) => ({
-  type: SET_FONT_LOADED,
+export const setImagesLoaded = (payload) => ({
+  type: SET_IMAGES_LOADED,
   payload,
 });
 
-export const setTossInProgress = (payload) => ({
-  type: SET_TOSS_IN_PROGRESS,
+export const setDialogShare = (payload) => ({
+  type: SET_DIALOG_SHARE,
+  payload,
+});
+
+export const setDialogInfo = (payload) => ({
+  type: SET_DIALOG_INFO,
   payload,
 });

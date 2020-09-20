@@ -4,6 +4,11 @@ const theme = createMuiTheme({
   typography: {
     fontFamily: "Playfair Display",
   },
+  props: {
+    MuiButton: {
+      variant: "contained",
+    },
+  },
 });
 
 export default responsiveFontSizes(theme);
