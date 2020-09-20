@@ -16,13 +16,24 @@ import Heads from "./assets/images/heads.png";
 import Tails from "./assets/images/tails.png";
 import { InformationVariant } from "mdi-material-ui";
 import DialogInfo from "./comps/DialogInfo";
-import { setDialogInfo, setImagesLoaded } from "./state/actions";
+import {
+  setDialogInfo,
+  setImagesLoaded,
+  setCoinTossInProgress,
+  setFontLoaded,
+  setSiteReadyToShow,
+  setCoinFace,
+} from "./state/actions";
 
-function App({ dispatch, imagesLoaded }) {
+function App({
+  dispatch,
+  imagesLoaded,
+  fontLoaded,
+  coinTossInProgress,
+  siteReadyToShow,
+  coinFace,
+}) {
   const [soundStatus, setSoundStatus] = useState(Sound.status.STOPPED);
-  const [fontLoaded, setFontLoaded] = useState(false);
-  const [coinFace, setCoinFace] = useState(null);
-  const [coinTossInProgress, setCoinTossInProgress] = useState(false);
 
   useEffect(() => {
     window.soundManager.setup({ debugMode: false });
@@ -43,7 +54,7 @@ function App({ dispatch, imagesLoaded }) {
       const font = new FontFaceObserver("Playfair Display");
       font
         .load()
-        .then(() => setFontLoaded(true))
+        .then(() => dispatch(setFontLoaded(true)))
         .catch(() => {
           console.log("There was an error loading the font");
           loadFont();
@@ -53,8 +64,15 @@ function App({ dispatch, imagesLoaded }) {
     //eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    if (fontLoaded && imagesLoaded) {
+      dispatch(setSiteReadyToShow(true));
+    }
+    //eslint-disable-next-line
+  }, [fontLoaded, imagesLoaded]);
+
   const handleClick = () => {
-    setCoinTossInProgress(true);
+    dispatch(setCoinTossInProgress(true));
     setSoundStatus(Sound.status.PLAYING);
   };
 
@@ -63,15 +81,15 @@ function App({ dispatch, imagesLoaded }) {
     const headsOrTails = Math.round(Math.random());
 
     if (headsOrTails === 0) {
-      setCoinFace("tails");
+      dispatch(setCoinFace("tails"));
     } else {
-      setCoinFace("heads");
+      dispatch(setCoinFace("heads"));
     }
-    setCoinTossInProgress(false);
+    dispatch(setCoinTossInProgress(false));
   };
 
   return (
-    <Grow in={fontLoaded && imagesLoaded}>
+    <Grow in={siteReadyToShow}>
       <Box
         display="flex"
         minHeight="100vh"
@@ -135,6 +153,10 @@ function App({ dispatch, imagesLoaded }) {
 const mapStateToProps = (state) => ({
   infoIsOpen: state.dialogInfo,
   imagesLoaded: state.imagesLoaded,
+  fontLoaded: state.fontLoaded,
+  siteReadyToShow: state.siteReadyToShow,
+  coinTossInProgress: state.coinTossInProgress,
+  coinFace: state.coinFace,
 });
 
 export default connect(mapStateToProps)(App);
